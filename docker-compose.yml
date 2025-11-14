@@ -1,0 +1,18 @@
+# TODO make 3.9 work
+version: "3.3"
+
+services:
+  alpha:
+    build: .
+    container_name: alpha
+    hostname: alpha
+    networks:
+      conti-test:
+        ipv4_address: 172.16.100.140
+
+networks:
+  conti-test:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.100.128/26
