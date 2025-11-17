@@ -12,25 +12,26 @@ services:
         ipv4_address: 172.16.100.140
 
   bravo:
-   build:
-     context: . 
-     dockerfile: conti-test
-   container_name: barvo
-   hostname: bravo
-   networks:
-     conti-test:
-       ipv4_address: 172.16.100.141
+    build:
+      context: . 
+      dockerfile: conti-test
+    container_name: bravo
+    hostname: bravo
+    networks:
+      conti-test:
+        ipv4_address: 172.16.100.141
+  
   charlie:
-   build:
-     context: . 
-     dockerfile: conti-test
-   container_name: charlie
-   hostname: charlie
-   networks:
-     conti-test:
-       ipv4_address: 172.16.100.142
-
-
+    build:
+      context: .
+      dockerfile: conti-test
+    container_name: charlie
+    hostname: charlie
+    networks:
+      conti-test:
+        ipv4_address: 172.16.100.142
+    volumes:
+      - charlie-data:/opt/data
 
 networks:
   conti-test:
@@ -38,3 +39,6 @@ networks:
     ipam:
       config:
         - subnet: 172.16.100.128/26
+
+volumes:
+  charlie-data:
