@@ -1,0 +1,26 @@
+---
+- hosts: west
+  become: yes
+  tasks:
+    - name: Motd west group
+      ansible.builtin.lineinfile:
+        path: /home/ansible/.bashrc
+        line: 'echo "Once upon a time in the west."'
+        create: yes
+        state: present
+      become_user: ansible
+
+
+
+
+- hosts: east
+  become: yes
+  tasks:
+    - name: Motd east group
+      ansible.builtin.lineinfile:
+        path: /home/ansible/.bashrc
+        line: 'echo "Eastern promises"'
+        create: yes
+        state: present
+      become_user: ansible
+
