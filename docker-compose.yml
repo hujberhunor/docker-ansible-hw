@@ -5,12 +5,12 @@ services:
     build:
       context: . 
       dockerfile: conti-test
-    container_name: alpha
-    hostname: alpha
+    container_name: alpha 
+    hostname: alpha 
     networks:
       conti-test:
         ipv4_address: 172.16.100.140
-
+    
   bravo:
     build:
       context: . 
@@ -20,7 +20,10 @@ services:
     networks:
       conti-test:
         ipv4_address: 172.16.100.141
-  
+    depends_on:
+      - alpha
+
+
   charlie:
     build:
       context: .
@@ -32,6 +35,12 @@ services:
         ipv4_address: 172.16.100.142
     volumes:
       - charlie-data:/opt/data
+    depends_on:
+      - bravo
+    environment:
+      - CONTI_ENV
+      - CONTI_DB_NAME
+
 
 networks:
   conti-test:
