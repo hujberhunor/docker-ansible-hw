@@ -2,8 +2,10 @@
 
 up: 
 	sh gen-ssh.sh
-	docker-compose -f docker/docker-compose.yml up -d
+	docker-compose up -d
 down:
-	docker-compose -f docker/docker-compose.yml down
+	docker-compose down
 ansible:
-	ansible-playbook ansible/playbook/motd.yml -i ansible/inventory.ini
+	ansible-playbook playbook/motd.yml 
+ping:
+	ansible all -m ping 

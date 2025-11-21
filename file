@@ -1,0 +1,88 @@
+# Conti-test docker img
+FROM ubuntu:20.04
+
+# Openssh server, sudo and tini (init)
+RUN apt update && apt install -y sudo openssh-server tini python3 && \
+mkdir /var/run/sshd
+
+# Ansible user and group + no sudo pass
+RUN groupadd -g 71000 ansible && useradd -m -u 71000 -g 71000 -s /bin/bash ansible && \
+echo 'ansible ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers 
+
+## Copy ssh keys 
+COPY id_ed.pub /home/ansible/.ssh/authorized_keys
+
+# SSH key storage (need a better name)
+RUN mkdir -p /home/ansible/.ssh && chown ansible:ansible /home/ansible/.ssh && \
+chmod 700 /home/ansible/.ssh
+
+## Expose ssh port to outside, needed for ansible
+EXPOSE 22
+
+# Tini as init 
+ENTRYPOINT ["/usr/bin/tini", "--"] 
+
+# Start ssh daemon
+CMD ["/usr/sbin/sshd", "-D"]
+version: "3.3"
+
+services:
+  alpha:
+    build:
+      context: . 
+      dockerfile: conti-test
+    container_name: alpha
+    hostname: alpha
+    networks:
+      conti-test:
+        ipv4_address: 172.16.100.140
+
+  bravo:
+    build:
+      context: . 
+      dockerfile: conti-test
+    container_name: bravo
+    hostname: bravo
+    networks:
+      conti-test:
+        ipv4_address: 172.16.100.141
+  
+  charlie:
+    build:
+      context: .
+      dockerfile: conti-test
+    container_name: charlie
+    hostname: charlie
+    networks:
+      conti-test:
+        ipv4_address: 172.16.100.142
+    volumes:
+      - charlie-data:/opt/data
+
+networks:
+  conti-test:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.100.128/26
+
+volumes:
+  charlie-data:
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFX1dzbev4wHBHw/OSIc4AzKOjALMl+Pg5LwiVlY617H hujber.hunor@gmail.com
+[defaults]
+host_key_checking = False
+inventory = ./inventory.ini
+
+
+[west]
+alpha ansible_host=172.16.100.140 
+bravo ansible_host=172.16.100.141 
+
+[east]
+charlie ansible_host=172.16.100.142
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_user=ansible
+
+

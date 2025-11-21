@@ -9,12 +9,12 @@ mkdir /var/run/sshd
 RUN groupadd -g 71000 ansible && useradd -m -u 71000 -g 71000 -s /bin/bash ansible && \
 echo 'ansible ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers 
 
-## Copy ssh keys 
-COPY id_ed.pub /home/ansible/.ssh/authorized_keys
-
 # SSH key storage (need a better name)
 RUN mkdir -p /home/ansible/.ssh && chown ansible:ansible /home/ansible/.ssh && \
 chmod 700 /home/ansible/.ssh
+
+## Copy ssh keys 
+COPY id_ed.pub /home/ansible/.ssh/authorized_keys
 
 ## Expose ssh port to outside, needed for ansible
 EXPOSE 22

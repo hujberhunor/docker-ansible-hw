@@ -6,5 +6,9 @@ if [ ! -f ~/.ssh/id_ed.pub ]; then
 	        echo "SSH key is already there"
 fi 
 
+echo "Copying ssh key to build dir"
+cp ~/.ssh/id_ed.pub ./id_ed.pub
+cp ~/.ssh/id_ed ./id_ed
+
 
 
