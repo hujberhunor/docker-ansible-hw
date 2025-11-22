@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: delete sources content
+      copy:
+        dest: /etc/apt/sources.list
+        content: ""
+        owner: root
+        group: root
+        mode: '0644'
+    
+    - name: add mirror to sources
+      copy:
+        dest: /etc/apt/sources.list
+        content: |
+          deb {{ mirror }} focal main restricted universe multiverse
+          deb {{ mirror }} focal-updates main restricted universe multiverse
+          deb {{ mirror }} focal-backports main restricted universe multiverse
+          deb {{ mirror }} focal-security main restricted universe multiverse
+
+
