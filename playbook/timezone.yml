@@ -1,0 +1,8 @@
+---
+- hosts: west, east
+  become: yes
+  tasks:
+    - name: set timezone to bud
+      become: true
+      community.general.timezone:
+        name: Europe/Budapest
