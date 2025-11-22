@@ -23,6 +23,6 @@ up:
 down:
 	docker compose down
 ansible:
-	ansible-playbook playbook/motd.yml 
+	ansible-playbook playbook/setup.yml
 ping:
 	ansible all -m ping 
