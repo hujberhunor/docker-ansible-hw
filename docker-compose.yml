@@ -10,6 +10,7 @@ services:
     networks:
       conti-test:
         ipv4_address: 172.16.100.140
+    oom_score_adj: 0
     
   bravo:
     build:
@@ -27,6 +28,7 @@ services:
        limits:
          cpus: '0.1'
          memory: 4g
+    oom_score_adj: 0
 
 
   charlie:
@@ -45,7 +47,7 @@ services:
     environment:
       - CONTI_ENV
       - CONTI_DB_NAME
-
+    oom_score_adj: -500
 
 networks:
   conti-test:
