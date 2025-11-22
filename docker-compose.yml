@@ -35,19 +35,23 @@ services:
     build:
       context: .
       dockerfile: conti-test
-    container_name: charlie
-    hostname: charlie
+    container_name: charlie # docker cli name
+    hostname: charlie # inside ct and in network
     networks:
       conti-test:
         ipv4_address: 172.16.100.142
     volumes:
-      - charlie-data:/opt/data
+      - charlie-data:/opt/data # presistent vol
     depends_on:
-      - bravo
+      - bravo # start after bravo is up
     environment:
       - CONTI_ENV
       - CONTI_DB_NAME
-    oom_score_adj: -500
+    oom_score_adj: -500 # ommm prio
+    ulimits: # file descriptor
+      nofile:
+        soft: 1048576
+        hard: 1048576
 
 networks:
   conti-test:
