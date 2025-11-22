@@ -2,7 +2,7 @@
 FROM ubuntu:20.04
 
 # Openssh server, sudo and tini (init)
-RUN apt update && apt install -y sudo openssh-server tini python3 && \
+RUN apt update && apt install -y sudo openssh-server tini python3 netcat-openbsd && \
 mkdir /var/run/sshd
 
 # Ansible user and group + no sudo pass
