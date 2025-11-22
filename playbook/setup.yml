@@ -1,0 +1,59 @@
+---
+# motd
+- hosts: west
+  become: yes
+  tasks:
+    - name: Motd west group
+      ansible.builtin.lineinfile:
+        path: /home/ansible/.bashrc
+        line: 'echo "Once upon a time in the west."'
+        create: yes
+        state: present
+      become_user: ansible
+
+
+
+
+- hosts: east
+  become: yes
+  tasks:
+    - name: Motd east group
+      ansible.builtin.lineinfile:
+        path: /home/ansible/.bashrc
+        line: 'echo "Eastern promises"'
+        create: yes
+        state: present
+      become_user: ansible
+
+# timezone
+- hosts: all
+  become: yes
+  tasks:
+    - name: set timezone to bud
+      become: true
+      community.general.timezone:
+        name: "{{ timezone }}"
+
+# apt mirror
+- hosts: all
+  become: yes
+  tasks:
+    - name: delete sources content
+      copy:
+        dest: /etc/apt/sources.list
+        content: ""
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: add mirror to sources
+      copy:
+        dest: /etc/apt/sources.list
+        content: |
+          deb {{ mirror }} focal main restricted universe multiverse
+          deb {{ mirror }} focal-updates main restricted universe multiverse
+          deb {{ mirror }} focal-backports main restricted universe multiverse
+          deb {{ mirror }} focal-security main restricted universe multiverse
+
+
+
